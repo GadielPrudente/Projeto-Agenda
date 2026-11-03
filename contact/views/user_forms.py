@@ -1,6 +1,9 @@
+from django.http import request
 from django.shortcuts import render, redirect
 from contact.forms import RegisterForm
-from django.contrib import messages
+from django.contrib import messages, auth
+from django.contrib.auth.forms import AuthenticationForm
+
 
 
 def register(request):
@@ -15,7 +18,7 @@ def register(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Registro realizado com sucesso!')
-            return redirect('contact:index')
+            return redirect('contact:login')
             
 
     return render(
@@ -26,3 +29,33 @@ def register(request):
         }
 
     )
+
+
+def login_view(request):
+    messages.info(request, 'Preencha o formulário para fazer login')
+
+    form = AuthenticationForm(request)
+
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+
+        if form.is_valid():
+            user = form.get_user()
+            messages.success(request, 'Login realizado com sucesso!')
+            auth.login(request, user)
+            return redirect('contact:index')
+        messages.error(request, 'Usuário ou senha inválidos.')
+
+    return render(
+        request,
+        'contact/login.html',
+        {
+            'form': form,
+        }
+    )
+
+
+def logout_view(request):
+    auth.logout(request)
+    messages.success(request, 'Logout realizado com sucesso!')
+    return redirect('contact:index')
