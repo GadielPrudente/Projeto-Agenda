@@ -20,22 +20,27 @@
             </p>
         {% endif %}
 
-        <div class="contact-links">
-            <a class="btn btn-link" href="{% url 'contact:update' contact.id %}">update</a>
-            
-            <form method="post" action="{% url "contact:delete" contact.id %}">
 
-                {% csrf_token %}
+        {% if user == contact.owner %}
 
-                {% if confirmation == 'no' %}
-                    <input type="hidden" name="confirmation" value="yes">
-                    <button type="submit" class="btn btn-link btn-delete">confirm</button>
-                {% else %}
-                    <button type="submit" class="btn btn-link btn-delete">delete</button>
+            <div class="contact-links">
+                <a class="btn btn-link" href="{% url 'contact:update' contact.id %}">update</a>
                 
-                {% endif %}
-            </form>
-            
-        </div>
+                <form method="post" action="{% url "contact:delete" contact.id %}">
+
+                    {% csrf_token %}
+
+                    {% if confirmation == 'no' %}
+                        <input type="hidden" name="confirmation" value="yes">
+                        <button type="submit" class="btn btn-link btn-delete">confirm</button>
+                    {% else %}
+                        <button type="submit" class="btn btn-link btn-delete">delete</button>
+                    
+                    {% endif %}
+                </form>
+                
+            </div>
+
+        {% endif %}
     </div>
 {% endblock content %}

@@ -9,7 +9,7 @@ class ContactForm(forms.ModelForm):
 
     picture = forms.ImageField(
         required=False,
-        widget=forms.FileInput(attrs={'accept': 'image/*'}),)
+        widget=forms.FileInput(attrs={'accept': 'image/*', 'required': False}),)
 
     class Meta:
         model = models.Contact
