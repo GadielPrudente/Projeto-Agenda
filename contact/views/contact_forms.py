@@ -19,7 +19,9 @@ def create(request):
         }
 
         if form.is_valid():
-            contact = form.save()
+            contact = form.save(commit=False)
+            contact.owner = request.user
+            contact.save()
             return redirect('contact:update', contact_id=contact.pk)
 
         return render(request, 'contact/create.html', context)
